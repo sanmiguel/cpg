@@ -346,7 +346,7 @@ nomad_restart(_Reason,
                            restarts = Restarts,
                            max_r = MaxR,
                            max_t = MaxT} = NomadState) ->
-    Now = erlang:now(),
+    Now = try erlang:timestamp() catch error:undef -> erlang:now() end,
     NewRestarts = lists:dropwhile(fun(T) ->
         timer:now_diff(Now, T) / 1000000 > MaxT
     end, Restarts) ++ [Now],
